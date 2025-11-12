@@ -24,6 +24,7 @@
     "@mantine/code-highlight": "^7.17.7",
     "@mantine/core": "^7.17.7",
     "@mantine/dropzone": "^7.17.7",
+    "@mantine/form": "^8.3.7",
     "@mantine/hooks": "^7.17.7",
     "@monaco-editor/react": "^4.7.0",
     "@sentry/nextjs": "^7.120.3",

@@ -49,6 +49,34 @@ const useGraph = create<Graph & GraphActions>((set, get) => ({
   ...initialStates,
   clearGraph: () => set({ nodes: [], edges: [], loading: false }),
   setSelectedNode: nodeData => set({ selectedNode: nodeData }),
+  updateNode: (id, fields) =>
+    set(state => {
+      const nodes = state.nodes.map(n => {
+        if (n.id !== id) return n;
+
+        const newText = n.text.map(row => {
+          // update keyed primitive rows
+          if (row.key && Object.prototype.hasOwnProperty.call(fields, row.key)) {
+            if (row.type !== "object" && row.type !== "array") {
+              return { ...row, value: fields[row.key] };
+            }
+            return row;
+          }
+
+          // update single-value nodes (no key)
+          if (!row.key && Object.prototype.hasOwnProperty.call(fields, "value")) {
+            return { ...row, value: fields["value"] };
+          }
+
+          return row;
+        });
+
+        return { ...n, text: newText };
+      });
+
+      const selectedNode = nodes.find(n => n.id === id) ?? state.selectedNode;
+      return { nodes, selectedNode };
+    }),
   setGraph: (data, options) => {
     const { nodes, edges } = parser(data ?? useJson.getState().json);
 

@@ -1,7 +1,8 @@
 import React from "react";
 import type { ModalProps } from "@mantine/core";
-import { Modal, Stack, Text, ScrollArea, Flex, CloseButton } from "@mantine/core";
+import { Modal, Stack, Text, ScrollArea, Flex, CloseButton, Button } from "@mantine/core";
 import { CodeHighlight } from "@mantine/code-highlight";
+import { useModal } from "../../../store/useModal";
 import type { NodeData } from "../../../types/graph";
 import useGraph from "../../editor/views/GraphView/stores/useGraph";
 
@@ -28,6 +29,7 @@ const jsonPathToString = (path?: NodeData["path"]) => {
 
 export const NodeModal = ({ opened, onClose }: ModalProps) => {
   const nodeData = useGraph(state => state.selectedNode);
+  const setVisible = useModal(state => state.setVisible);
 
   return (
     <Modal size="auto" opened={opened} onClose={onClose} centered withCloseButton={false}>
@@ -37,6 +39,15 @@ export const NodeModal = ({ opened, onClose }: ModalProps) => {
             <Text fz="xs" fw={500}>
               Content
             </Text>
+            <Button
+              style={{ marginLeft: "175px" }}
+              onClick={() => {
+                setVisible("NodeEditModal", true);
+                setVisible("NodeModal", false);
+              }}
+            >
+              Edit
+            </Button>
             <CloseButton onClick={onClose} />
           </Flex>
           <ScrollArea.Autosize mah={250} maw={600}>
